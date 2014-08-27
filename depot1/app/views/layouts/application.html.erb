@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Online Store</title>
+<%= stylesheet_link_tag "application", media: "all","data-turbolinks-track" => true %>
+<%= javascript_include_tag "application", "data-turbolinks-track" => true %>
+<%= csrf_meta_tags %>
+</head>
+<body class="<%= controller.controller_name %>">
+
+<div id="banner">
+<%= image_tag("online_shopping.jpeg") %>
+<%= @page_title || t('.title') %>
+<%= form_tag store_path, class: 'locale' do %>
+<%= select_tag 'set_locale', options_for_select(LANGUAGES, I18n.locale.to_s), onchange: 'this.form.submit()' %>
+<%= submit_tag 'submit' %>
+<%= javascript_tag "$('.locale input').hide()" %>
+<% end %>
+</div>
+
+<div id="columns">
+
+<div id="side"style="background-color:#E9967A; height:1200px;width:200px;float:left;">
+
+<ul>
+<li><a href="http://localhost:3000/en"><%= t('.home') %></a></li>
+
+<li><a href="http://www.theprices.com/BOS2faq.htm"><%= t('.questions') %></a></li>
+
+<li><a href="http://timesofindia.indiatimes.com/"><%= t('.news') %></a></li>
+
+<li><a href="http://www.railsfactory.com/contact"><%= t('.contact') %></a></li>
+
+</ul>
+<% if session[:user_id] %>
+<ul>
+<li><%= link_to 'Orders', orders_path%></li>
+<li><%= link_to 'Products', products_path %></li>
+<li><%= link_to 'Users', users_path%></li>
+</ul>
+<%= button_to 'Logout', logout_path, method: :delete %>
+<% end %>
+<% if @cart %>
+<%= hidden_div_if(@cart.line_items.empty?, id: 'cart') do %>
+<%= render @cart %>
+<% end %>
+<% end %>
+</div>
+
+
+<div id="main">
+<%= yield %>
+</div>
+</div>
+</body>
+</html>
+
